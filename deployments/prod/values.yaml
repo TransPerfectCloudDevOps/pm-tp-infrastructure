@@ -1,0 +1,35 @@
+# Production Environment - Full HA
+# See staging values for reference
+# TODO: Configure production-grade resources and security
+
+tidb:
+  enabled: true
+  # Configure for production
+
+valkey:
+  enabled: true
+  # Configure for production
+
+minio:
+  enabled: true
+  # Configure for production
+
+nats:
+  enabled: true
+  # Configure for production
+
+opensearch:
+  enabled: true
+  # Configure for production
+
+keycloak:
+  enabled: true
+  # Configure for production
+
+prometheus:
+  enabled: true
+  # Configure for production
+
+grafana:
+  enabled: true
+  # Configure for production

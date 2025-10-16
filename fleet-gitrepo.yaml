@@ -1,0 +1,13 @@
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: pm-tp-infrastructure
+  namespace: fleet-default
+spec:
+  repo: https://github.com/TransPerfectCloudDevOps/pm-tp-infrastructure.git
+  branch: main
+  paths:
+    - /
+  targets:
+    - clusterSelector: {}
+  pollingInterval: 120s

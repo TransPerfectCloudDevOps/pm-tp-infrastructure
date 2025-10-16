@@ -1,0 +1,148 @@
+# Staging Environment - Moderate Resources
+# HA configuration, production-like setup
+
+# TiDB
+tidb:
+  enabled: true
+  chart:
+    repo: https://charts.bitnami.com/bitnami
+    name: tidb
+    version: "1.0.0"
+  values:
+    pd:
+      replicaCount: 3
+      persistence:
+        size: 10Gi
+    tikv:
+      replicaCount: 3
+      persistence:
+        size: 50Gi
+    tidb:
+      replicaCount: 2
+
+# Valkey
+valkey:
+  enabled: true
+  chart:
+    repo: https://charts.bitnami.com/bitnami
+    name: redis
+    version: "18.x.x"
+  values:
+    architecture: replication
+    auth:
+      enabled: true
+      password: "changeme123"
+    master:
+      persistence:
+        size: 10Gi
+    replica:
+      replicaCount: 2
+      persistence:
+        size: 10Gi
+
+# MinIO
+minio:
+  enabled: true
+  chart:
+    repo: https://charts.min.io/
+    name: minio
+    version: "5.x.x"
+  values:
+    mode: distributed
+    replicas: 4
+    persistence:
+      size: 50Gi
+    rootUser: admin
+    rootPassword: "changeme123"
+    buckets:
+      - name: pm-tp-files
+        policy: none
+
+# NATS
+nats:
+  enabled: true
+  chart:
+    repo: https://nats-io.github.io/k8s/helm/charts/
+    name: nats
+    version: "1.x.x"
+  values:
+    nats:
+      jetstream:
+        enabled: true
+        fileStore:
+          pvc:
+            size: 20Gi
+    cluster:
+      enabled: true
+      replicas: 3
+
+# OpenSearch
+opensearch:
+  enabled: true
+  chart:
+    repo: https://opensearch-project.github.io/helm-charts/
+    name: opensearch
+    version: "2.x.x"
+  values:
+    replicas: 3
+    minimumMasterNodes: 2
+    persistence:
+      size: 30Gi
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+
+# Keycloak
+keycloak:
+  enabled: true
+  chart:
+    repo: https://charts.bitnami.com/bitnami
+    name: keycloak
+    version: "18.x.x"
+  values:
+    auth:
+      adminUser: admin
+      adminPassword: "changeme123"
+    replicaCount: 2
+    postgresql:
+      enabled: true
+      auth:
+        password: "changeme123"
+
+# Prometheus
+prometheus:
+  enabled: true
+  chart:
+    repo: https://prometheus-community.github.io/helm-charts
+    name: prometheus
+    version: "25.x.x"
+  values:
+    server:
+      retention: 15d
+      persistentVolume:
+        size: 30Gi
+    alertmanager:
+      enabled: true
+
+# Grafana
+grafana:
+  enabled: true
+  chart:
+    repo: https://grafana.github.io/helm-charts
+    name: grafana
+    version: "7.x.x"
+  values:
+    adminUser: admin
+    adminPassword: "changeme123"
+    persistence:
+      enabled: true
+      size: 10Gi
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://prometheus-server
+            isDefault: true

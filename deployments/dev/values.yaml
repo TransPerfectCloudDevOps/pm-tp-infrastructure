@@ -1,0 +1,178 @@
+# Development Environment - Minimal Resources
+# Single replicas, reduced storage
+
+# TiDB - Distributed SQL Database
+tidb:
+  enabled: true
+  
+  # Use Bitnami TiDB chart
+  # helm repo add bitnami https://charts.bitnami.com/bitnami
+  chart:
+    repo: https://charts.bitnami.com/bitnami
+    name: tidb
+    version: "1.0.0"  # Check latest version
+  
+  values:
+    pd:
+      replicaCount: 1
+      persistence:
+        size: 5Gi
+    tikv:
+      replicaCount: 1
+      persistence:
+        size: 10Gi
+    tidb:
+      replicaCount: 1
+    
+    service:
+      type: ClusterIP
+      port: 4000
+
+# Valkey - Redis-compatible Cache
+valkey:
+  enabled: true
+  
+  # Use Bitnami Redis chart (Valkey-compatible)
+  chart:
+    repo: https://charts.bitnami.com/bitnami
+    name: redis
+    version: "18.x.x"
+  
+  values:
+    architecture: standalone
+    auth:
+      enabled: false  # Disable for dev
+    master:
+      persistence:
+        size: 2Gi
+    replica:
+      replicaCount: 0  # No replicas in dev
+
+# MinIO - Object Storage
+minio:
+  enabled: true
+  
+  chart:
+    repo: https://charts.min.io/
+    name: minio
+    version: "5.x.x"
+  
+  values:
+    mode: standalone
+    replicas: 1
+    persistence:
+      size: 10Gi
+    
+    rootUser: minioadmin
+    rootPassword: minioadmin123
+    
+    buckets:
+      - name: pm-tp-files
+        policy: none
+        purge: false
+
+# NATS - Messaging
+nats:
+  enabled: true
+  
+  chart:
+    repo: https://nats-io.github.io/k8s/helm/charts/
+    name: nats
+    version: "1.x.x"
+  
+  values:
+    nats:
+      jetstream:
+        enabled: true
+        fileStore:
+          pvc:
+            size: 5Gi
+    
+    cluster:
+      enabled: false  # Single instance in dev
+
+# OpenSearch - Search Engine
+opensearch:
+  enabled: true
+  
+  chart:
+    repo: https://opensearch-project.github.io/helm-charts/
+    name: opensearch
+    version: "2.x.x"
+  
+  values:
+    replicas: 1
+    minimumMasterNodes: 1
+    
+    persistence:
+      size: 10Gi
+    
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+
+# Keycloak - Identity & Access Management
+keycloak:
+  enabled: true
+  
+  chart:
+    repo: https://charts.bitnami.com/bitnami
+    name: keycloak
+    version: "18.x.x"
+  
+  values:
+    auth:
+      adminUser: admin
+      adminPassword: admin123
+    
+    replicaCount: 1
+    
+    postgresql:
+      enabled: true
+      auth:
+        password: keycloak123
+
+# Prometheus - Monitoring
+prometheus:
+  enabled: true
+  
+  chart:
+    repo: https://prometheus-community.github.io/helm-charts
+    name: prometheus
+    version: "25.x.x"
+  
+  values:
+    server:
+      retention: 7d
+      persistentVolume:
+        size: 10Gi
+    
+    alertmanager:
+      enabled: false
+
+# Grafana - Dashboards
+grafana:
+  enabled: true
+  
+  chart:
+    repo: https://grafana.github.io/helm-charts
+    name: grafana
+    version: "7.x.x"
+  
+  values:
+    adminUser: admin
+    adminPassword: admin123
+    
+    persistence:
+      enabled: true
+      size: 5Gi
+    
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://prometheus-server
+            isDefault: true

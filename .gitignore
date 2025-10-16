@@ -1,0 +1,12 @@
+# Helm
+charts/*/charts/
+charts/*/Chart.lock
+*.tgz
+
+# Secrets (never commit these!)
+**/secrets.yaml
+**/*-secrets.yaml
+
+# Local dev
+.env
+.DS_Store
