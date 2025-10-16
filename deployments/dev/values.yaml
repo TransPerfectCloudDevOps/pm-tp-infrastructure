@@ -5,12 +5,12 @@
 tidb:
   enabled: true
   
-  # Use Bitnami TiDB chart
-  # helm repo add bitnami https://charts.bitnami.com/bitnami
+  # Use official PingCAP TiDB Operator chart
+  # helm repo add pingcap https://charts.pingcap.org/
   chart:
-    repo: https://charts.bitnami.com/bitnami
-    name: tidb
-    version: "1.0.0"  # Check latest version
+    repo: https://charts.pingcap.org/
+    name: tidb-operator
+    version: "1.5.0"  # Check latest version
   
   values:
     pd:
@@ -32,11 +32,11 @@ tidb:
 valkey:
   enabled: true
   
-  # Use Bitnami Redis chart (Valkey-compatible)
+  # Use official Valkey chart
   chart:
-    repo: https://charts.bitnami.com/bitnami
-    name: redis
-    version: "18.x.x"
+    repo: https://charts.valkey.io
+    name: valkey
+    version: "0.1.0"
   
   values:
     architecture: standalone
@@ -117,9 +117,9 @@ keycloak:
   enabled: true
   
   chart:
-    repo: https://charts.bitnami.com/bitnami
+    repo: https://charts.keycloak.org
     name: keycloak
-    version: "18.x.x"
+    version: "20.0.0"
   
   values:
     auth:

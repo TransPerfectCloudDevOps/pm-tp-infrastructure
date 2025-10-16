@@ -5,9 +5,9 @@
 tidb:
   enabled: true
   chart:
-    repo: https://charts.bitnami.com/bitnami
-    name: tidb
-    version: "1.0.0"
+    repo: https://charts.pingcap.org/
+    name: tidb-operator
+    version: "1.5.0"
   values:
     pd:
       replicaCount: 3
@@ -24,9 +24,9 @@ tidb:
 valkey:
   enabled: true
   chart:
-    repo: https://charts.bitnami.com/bitnami
-    name: redis
-    version: "18.x.x"
+    repo: https://charts.valkey.io
+    name: valkey
+    version: "0.1.0"
   values:
     architecture: replication
     auth:
@@ -97,9 +97,9 @@ opensearch:
 keycloak:
   enabled: true
   chart:
-    repo: https://charts.bitnami.com/bitnami
+    repo: https://charts.keycloak.org
     name: keycloak
-    version: "18.x.x"
+    version: "20.0.0"
   values:
     auth:
       adminUser: admin

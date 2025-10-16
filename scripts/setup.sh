@@ -13,10 +13,12 @@ echo ""
 
 # Add Helm repositories
 echo "📦 Adding Helm repositories..."
-helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add pingcap https://charts.pingcap.org/
+helm repo add valkey https://charts.valkey.io
 helm repo add minio https://charts.min.io/
 helm repo add nats https://nats-io.github.io/k8s/helm/charts/
 helm repo add opensearch https://opensearch-project.github.io/helm-charts/
+helm repo add keycloak https://charts.keycloak.org
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
