@@ -12,7 +12,7 @@ targets:
     clusterSelector:
       matchLabels:
         env: dev
-    namespace: pm-tp-dev
+    defaultNamespace: pm-tp-dev
     helm:
       valuesFiles:
         - ./deployments/dev/values.yaml
@@ -21,7 +21,7 @@ targets:
     clusterSelector:
       matchLabels:
         env: staging
-    namespace: pm-tp-staging
+    defaultNamespace: pm-tp-staging
     helm:
       valuesFiles:
         - ./deployments/staging/values.yaml
@@ -30,7 +30,7 @@ targets:
     clusterSelector:
       matchLabels:
         env: prod
-    namespace: pm-tp-prod
+    defaultNamespace: pm-tp-prod
     helm:
       valuesFiles:
         - ./deployments/prod/values.yaml
