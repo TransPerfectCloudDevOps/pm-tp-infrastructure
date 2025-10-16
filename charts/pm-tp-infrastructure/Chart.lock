@@ -1,0 +1,27 @@
+dependencies:
+- name: tidb-operator
+  repository: https://charts.pingcap.org/
+  version: v1.5.5
+- name: valkey
+  repository: https://valkey.io/valkey-helm/
+  version: 0.7.5
+- name: minio
+  repository: https://charts.min.io/
+  version: 5.0.15
+- name: nats
+  repository: https://nats-io.github.io/k8s/helm/charts/
+  version: 1.0.3
+- name: opensearch
+  repository: https://opensearch-project.github.io/helm-charts/
+  version: 2.0.1
+- name: keycloak
+  repository: https://codecentric.github.io/helm-charts
+  version: 18.10.0
+- name: prometheus
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 25.0.0
+- name: grafana
+  repository: https://grafana.github.io/helm-charts
+  version: 7.0.22
+digest: sha256:9862c499b134854c33b4890686589961a8476ce0f0262ecdc0909bdcc0263d86
+generated: "2025-10-16T16:17:15.946783-05:00"

@@ -11,3 +11,5 @@ spec:
   targets:
     - clusterSelector: {}
   pollingInterval: 120s
+  # Allow Fleet to access Helm chart repositories for dependencies
+  helmRepoURLRegex: "https://.*"

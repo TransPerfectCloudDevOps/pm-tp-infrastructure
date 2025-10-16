@@ -1,6 +1,9 @@
 # Helm
-charts/*/charts/
-charts/*/Chart.lock
+# For Fleet: Chart.lock is committed, but .tgz archives are excluded
+# Fleet will download dependencies using Chart.lock
+# charts/*/charts/
+# Commenting out Chart.lock so it can be committed for Fleet
+# charts/*/Chart.lock
 *.tgz
 
 # Secrets (never commit these!)

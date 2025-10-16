@@ -34,9 +34,9 @@ valkey:
   
   # Use official Valkey chart
   chart:
-    repo: https://charts.valkey.io
+    repo: https://valkey.io/valkey-helm/
     name: valkey
-    version: "0.1.0"
+    version: "0.7.0"
   
   values:
     architecture: standalone
@@ -117,9 +117,9 @@ keycloak:
   enabled: true
   
   chart:
-    repo: https://charts.keycloak.org
+    repo: https://codecentric.github.io/helm-charts
     name: keycloak
-    version: "20.0.0"
+    version: "18.10.0"
   
   values:
     auth:

@@ -6,7 +6,11 @@ helm:
   chart: ./charts/pm-tp-infrastructure
   releaseName: pm-tp-infra
   timeoutSeconds: 900
-
+  # Helm repository configuration for chart dependencies
+  repo: https://charts.pingcap.org/
+  # Additional repositories needed for dependencies
+  # Fleet will automatically add these when processing Chart.lock
+  
 targets:
   - name: dev
     clusterSelector:
