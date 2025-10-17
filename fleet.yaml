@@ -5,7 +5,7 @@ defaultNamespace: pm-tp-infra
 helm:
   chart: ./charts/pm-tp-infrastructure
   releaseName: pm-tp-infra
-  timeoutSeconds: 900
+  timeoutSeconds: 1800
   
 targets:
   - name: dev
