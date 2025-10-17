@@ -50,6 +50,7 @@ minio:
   values:
     mode: distributed
     replicas: 4
+    drivesPerNode: 1
     persistence:
       size: 50Gi
     rootUser: admin
