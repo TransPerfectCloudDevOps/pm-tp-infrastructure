@@ -108,6 +108,8 @@ keycloak:
     replicaCount: 2
     postgresql:
       enabled: true
+      image:
+        tag: "16.4.0-debian-12-r13"
       auth:
         password: "changeme123"
 
