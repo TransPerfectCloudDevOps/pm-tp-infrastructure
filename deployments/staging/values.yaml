@@ -105,22 +105,17 @@ keycloak:
     version: "7.1.4"
   values:
     replicas: 2
-    # Use H2 database for simplicity (not for production!)
-    # For production, configure external PostgreSQL via database section
+    # Use H2 embedded database (not for production, just for staging testing)
     command:
       - "/opt/keycloak/bin/kc.sh"
-      - "start"
-      - "--http-enabled=true"
+    args:
+      - "start-dev"
       - "--http-port=8080"
-      - "--hostname-strict=false"
-      - "--hostname-strict-https=false"
     extraEnv: |
       - name: KEYCLOAK_ADMIN
         value: "admin"
       - name: KEYCLOAK_ADMIN_PASSWORD
         value: "changeme123"
-      - name: JAVA_OPTS_APPEND
-        value: "-Djgroups.dns.query={{ include \"keycloak.fullname\" . }}-headless"
 
 # Prometheus
 prometheus:
