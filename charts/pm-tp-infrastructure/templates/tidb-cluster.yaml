@@ -1,4 +1,4 @@
-{{- if .Values.tidb.enabled }}
+{{- if and .Values.tidb.enabled .Values.tidbCluster.enabled }}
 apiVersion: pingcap.com/v1alpha1
 kind: TidbCluster
 metadata:

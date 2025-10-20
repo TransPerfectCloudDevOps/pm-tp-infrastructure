@@ -18,6 +18,7 @@ tidb:
 
 # TiDB Cluster configuration (used when tidb.enabled = true)
 tidbCluster:
+  enabled: false  # Enable after operator CRDs are installed
   pd:
     replicas: 3
     storage: "10Gi"
