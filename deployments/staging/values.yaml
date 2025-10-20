@@ -153,8 +153,8 @@ keycloak:
       hostname: pm-tp-infra-tidb-tidb.pm-tp-staging.svc
       port: 4000
       database: keycloak
-      username: root
-      password: ""  # TiDB default has no password for root
+      username: keycloak
+      password: "keycloak_secure_password_123"
     # Admin credentials
     extraEnv: |
       - name: KEYCLOAK_ADMIN
