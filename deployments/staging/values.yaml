@@ -25,9 +25,8 @@ tidb:
           memory: 512Mi
 
 # TiDB Cluster - Staging configuration with reduced resources
-# Disabled initially - will enable after operator CRDs are installed
 tidbCluster:
-  enabled: false
+  enabled: true  # CRDs are now installed, safe to enable
   pd:
     replicas: 3
     storage: "10Gi"
