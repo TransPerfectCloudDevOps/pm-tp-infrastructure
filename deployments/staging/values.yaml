@@ -10,6 +10,9 @@ tidb:
     name: tidb-operator
     version: "1.5.0"
   values:
+    # Disable scheduler - it has config compatibility issues
+    scheduler:
+      create: false
     # Minimal resources for staging
     controllerManager:
       replicas: 1
