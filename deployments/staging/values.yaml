@@ -97,8 +97,9 @@ opensearch:
         memory: 2Gi
 
 # Keycloak
+# Temporarily disabled - will re-enable after TiDB is configured
 keycloak:
-  enabled: true
+  enabled: false
   chart:
     repo: https://codecentric.github.io/helm-charts
     name: keycloakx
