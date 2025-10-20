@@ -32,10 +32,11 @@ dependencies:
     version: "~2.0.0"
     condition: opensearch.enabled
     
-  - name: keycloak
+  - name: keycloakx
     repository: https://codecentric.github.io/helm-charts
-    version: "~18.10.0"
+    version: "~7.1.0"
     condition: keycloak.enabled
+    alias: keycloak
     
   - name: prometheus
     repository: https://prometheus-community.github.io/helm-charts

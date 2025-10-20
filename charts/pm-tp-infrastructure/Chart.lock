@@ -14,14 +14,14 @@ dependencies:
 - name: opensearch
   repository: https://opensearch-project.github.io/helm-charts/
   version: 2.0.1
-- name: keycloak
+- name: keycloakx
   repository: https://codecentric.github.io/helm-charts
-  version: 18.10.0
+  version: 7.1.4
 - name: prometheus
   repository: https://prometheus-community.github.io/helm-charts
   version: 25.0.0
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 7.0.22
-digest: sha256:9862c499b134854c33b4890686589961a8476ce0f0262ecdc0909bdcc0263d86
-generated: "2025-10-20T11:40:38.391287-05:00"
+digest: sha256:e339a685ba45bc18aee192c5fdb14ef09168ffea8dc7e6c2e0cb83abceff87c8
+generated: "2025-10-20T14:21:54.06784-05:00"
