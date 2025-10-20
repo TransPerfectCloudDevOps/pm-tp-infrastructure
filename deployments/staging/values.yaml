@@ -1,25 +1,57 @@
 # Staging Environment - Moderate Resources
 # HA configuration, production-like setup
 
-# TiDB
-# Temporarily disabled - has issues, enable after basics are working
+# TiDB Operator
+# The operator manages TiDB clusters. The actual TiDB cluster is created separately.
 tidb:
-  enabled: false
+  enabled: true
   chart:
     repo: https://charts.pingcap.org/
     name: tidb-operator
     version: "1.5.0"
   values:
-    pd:
-      replicaCount: 3
-      persistence:
-        size: 10Gi
-    tikv:
-      replicaCount: 3
-      persistence:
-        size: 50Gi
-    tidb:
-      replicaCount: 2
+    # Minimal resources for staging
+    controllerManager:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+
+# TiDB Cluster - Staging configuration with reduced resources
+tidbCluster:
+  pd:
+    replicas: 3
+    storage: "10Gi"
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+  tikv:
+    replicas: 3
+    storage: "50Gi"
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+  tidb:
+    replicas: 2
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
 
 # Valkey
 valkey:
