@@ -132,27 +132,41 @@ opensearch:
         cpu: 1000m
         memory: 2Gi
 
-# Keycloak
-# Temporarily disabled - will re-enable after TiDB is configured
+# Keycloak - Identity and Access Management
 keycloak:
-  enabled: false
+  enabled: true
   chart:
     repo: https://codecentric.github.io/helm-charts
     name: keycloakx
     version: "7.1.4"
   values:
     replicas: 2
-    # Use H2 embedded database (not for production, just for staging testing)
+    # Configure to use TiDB (MySQL-compatible)
     command:
       - "/opt/keycloak/bin/kc.sh"
     args:
-      - "start-dev"
-      - "--http-port=8080"
+      - "start"
+      - "--optimized"
+    # Database configuration
+    database:
+      vendor: mysql
+      hostname: pm-tp-infra-tidb-tidb.pm-tp-staging.svc
+      port: 4000
+      database: keycloak
+      username: root
+      password: ""  # TiDB default has no password for root
+    # Admin credentials
     extraEnv: |
       - name: KEYCLOAK_ADMIN
         value: "admin"
       - name: KEYCLOAK_ADMIN_PASSWORD
         value: "changeme123"
+      - name: KC_HTTP_ENABLED
+        value: "true"
+      - name: KC_HOSTNAME_STRICT
+        value: "false"
+      - name: KC_PROXY
+        value: "edge"
 
 # Prometheus
 prometheus:
