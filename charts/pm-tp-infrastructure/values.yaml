@@ -4,9 +4,9 @@
 # MinIO - Object Storage
 minio:
   enabled: true
-  mode: distributed
   replicas: 4
-  drivesPerNode: 1  # IMPORTANT: Set to 1 to avoid 16 volumes (4 replicas × 4 drives = 16)
+  drivesPerNode: 1
+  mode: distributed
   persistence:
     size: 50Gi
 
