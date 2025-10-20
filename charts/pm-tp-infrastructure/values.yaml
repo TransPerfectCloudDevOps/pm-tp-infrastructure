@@ -1,0 +1,35 @@
+# Default values for pm-tp-infrastructure
+# These can be overridden by deployment-specific values files
+
+# MinIO - Object Storage
+minio:
+  enabled: true
+  mode: distributed
+  replicas: 4
+  drivesPerNode: 1  # IMPORTANT: Set to 1 to avoid 16 volumes (4 replicas × 4 drives = 16)
+  persistence:
+    size: 50Gi
+
+# All other components disabled by default
+# Enable them in deployment-specific values files
+
+tidb:
+  enabled: false
+
+valkey:
+  enabled: false
+
+nats:
+  enabled: false
+
+opensearch:
+  enabled: false
+
+keycloak:
+  enabled: false
+
+prometheus:
+  enabled: false
+
+grafana:
+  enabled: false
