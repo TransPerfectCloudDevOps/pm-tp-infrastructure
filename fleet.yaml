@@ -3,8 +3,9 @@
 defaultNamespace: pm-tp-infra
 
 # Depend on CRDs bundle to ensure they're installed first
+# Bundle name format: <gitrepo-name>-<path>
 dependsOn:
-  - name: pm-tp-crds
+  - name: pm-tp-infrastructure-crds
 
 helm:
   chart: ./charts/pm-tp-infrastructure
