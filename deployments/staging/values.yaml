@@ -141,10 +141,6 @@ keycloak:
     version: "7.1.4"
   values:
     replicas: 2
-    # Use args instead of command for keycloakx chart
-    args:
-      - "start"
-      - "--optimized"
     # Database configuration
     database:
       vendor: mysql
@@ -153,7 +149,7 @@ keycloak:
       database: keycloak
       username: keycloak
       password: "keycloak_secure_password_123"
-    # Admin credentials
+    # Admin credentials and startup configuration
     extraEnv: |
       - name: KEYCLOAK_ADMIN
         value: "admin"
@@ -173,6 +169,11 @@ keycloak:
         value: "keycloak"
       - name: KC_DB_PASSWORD
         value: "keycloak_secure_password_123"
+    # Use command to override container entrypoint
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "/opt/keycloak/bin/kc.sh start --optimized"
 
 # Prometheus
 prometheus:
