@@ -1,0 +1,86 @@
+{{- if and .Values.tidb.enabled .Values.tidbCluster.enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-tidb-crd-wait
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 30
+  template:
+    metadata:
+      name: {{ .Release.Name }}-tidb-crd-wait
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ .Release.Name }}-tidb-crd-wait
+      containers:
+      - name: wait-for-crds
+        image: bitnami/kubectl:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -e
+          echo "Waiting for TiDB CRDs to be installed..."
+          
+          max_attempts=60
+          attempt=0
+          
+          while [ $attempt -lt $max_attempts ]; do
+            if kubectl get crd tidbclusters.pingcap.com 2>/dev/null; then
+              echo "✓ TiDB CRDs are installed!"
+              exit 0
+            fi
+            
+            echo "Attempt $((attempt+1))/$max_attempts: CRDs not ready yet, waiting..."
+            sleep 5
+            attempt=$((attempt+1))
+          done
+          
+          echo "✗ Timeout waiting for TiDB CRDs"
+          exit 1
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-tidb-crd-wait
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-tidb-crd-wait
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+rules:
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Release.Name }}-tidb-crd-wait
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Release.Name }}-tidb-crd-wait
+subjects:
+- kind: ServiceAccount
+  name: {{ .Release.Name }}-tidb-crd-wait
+  namespace: {{ .Release.Namespace }}
+{{- end }}

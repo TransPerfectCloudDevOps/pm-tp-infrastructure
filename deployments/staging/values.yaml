@@ -26,7 +26,7 @@ tidb:
 
 # TiDB Cluster - Staging configuration with reduced resources
 tidbCluster:
-  enabled: true  # CRDs are now installed, safe to enable
+  enabled: true  # CRD wait job ensures CRDs are installed before cluster creation
   pd:
     replicas: 3
     storage: "10Gi"
