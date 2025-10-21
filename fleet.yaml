@@ -5,7 +5,7 @@ defaultNamespace: pm-tp-infra
 # Depend on CRDs bundle to ensure they're installed first
 # Bundle name format: <gitrepo-name>-<path>
 dependsOn:
-  - name: pm-tp-infrastructure-crds
+  - name: rancher-poc-app-bundle-1-crds
 
 helm:
   chart: ./charts/pm-tp-infrastructure
