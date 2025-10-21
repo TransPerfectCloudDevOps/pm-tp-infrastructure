@@ -1,8 +1,8 @@
 # Fleet Bundle for TiDB CRDs Only
 # This must be deployed before the main infrastructure bundle
 
-# Bundle name that main infrastructure will depend on
-namespace: pm-tp-staging
+# Use defaultNamespace instead of namespace to allow cluster-scoped CRDs
+defaultNamespace: pm-tp-staging
 
 # Match the same targets as main infrastructure
 targets:
