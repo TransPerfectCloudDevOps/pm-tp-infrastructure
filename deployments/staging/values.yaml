@@ -133,8 +133,9 @@ opensearch:
         memory: 2Gi
 
 # Keycloak - Identity and Access Management
+# TEMPORARILY DISABLED - chart not accepting command/args properly
 keycloak:
-  enabled: true
+  enabled: false
   chart:
     repo: https://codecentric.github.io/helm-charts
     name: keycloakx
