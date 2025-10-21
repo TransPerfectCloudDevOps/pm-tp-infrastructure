@@ -25,9 +25,8 @@ tidb:
           memory: 512Mi
 
 # TiDB Cluster - Staging configuration with reduced resources
-# NOTE: Enable this AFTER CRDs are installed (after first deployment completes)
 tidbCluster:
-  enabled: false  # Set to true after CRDs are installed
+  enabled: true
   pd:
     replicas: 3
     storage: "10Gi"
