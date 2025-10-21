@@ -1,0 +1,25 @@
+# Fleet Bundle for TiDB CRDs Only
+# This must be deployed before the main infrastructure bundle
+
+# Bundle name that main infrastructure will depend on
+namespace: pm-tp-staging
+
+# Match the same targets as main infrastructure
+targets:
+  - name: dev
+    clusterSelector:
+      matchLabels:
+        env: dev
+    defaultNamespace: pm-tp-dev
+
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        env: staging
+    defaultNamespace: pm-tp-staging
+
+  - name: prod
+    clusterSelector:
+      matchLabels:
+        env: prod
+    defaultNamespace: pm-tp-prod

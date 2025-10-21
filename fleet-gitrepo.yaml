@@ -7,7 +7,8 @@ spec:
   repo: https://github.com/TransPerfectCloudDevOps/pm-tp-infrastructure.git
   branch: main
   paths:
-    - /
+    - /crds      # CRDs bundle - deployed first
+    - /          # Main infrastructure - depends on CRDs
   targets:
     - clusterSelector: {}
   pollingInterval: 120s
