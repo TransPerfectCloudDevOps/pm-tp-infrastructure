@@ -141,9 +141,8 @@ keycloak:
     version: "7.1.4"
   values:
     replicas: 2
-    # Configure to use TiDB (MySQL-compatible)
-    command:
-      - "/opt/keycloak/bin/kc.sh"
+    # Use args instead of command for keycloakx chart
+    args:
       - "start"
       - "--optimized"
     # Database configuration
