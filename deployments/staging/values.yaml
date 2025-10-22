@@ -136,44 +136,36 @@ opensearch:
 keycloak:
   enabled: true
   chart:
-    repo: https://codecentric.github.io/helm-charts
-    name: keycloakx
-    version: "7.1.4"
+    repo: https://charts.bitnami.com/bitnami
+    name: keycloak
+    version: "21.1.2"  # Latest stable
   values:
-    replicas: 2
-    # Database configuration
-    database:
-      vendor: mysql
-      hostname: pm-tp-infra-tidb-tidb.pm-tp-staging.svc
-      port: 4000
-      database: keycloak
-      username: keycloak
-      password: "keycloak_secure_password_123"
-    # Admin credentials and startup configuration
-    extraEnv: |
-      - name: KEYCLOAK_ADMIN
-        value: "admin"
-      - name: KEYCLOAK_ADMIN_PASSWORD
-        value: "changeme123"
-      - name: KC_HTTP_ENABLED
-        value: "true"
-      - name: KC_HOSTNAME_STRICT
-        value: "false"
-      - name: KC_PROXY
-        value: "edge"
-      - name: KC_DB
-        value: "mysql"
-      - name: KC_DB_URL
-        value: "jdbc:mysql://pm-tp-infra-tidb-tidb.pm-tp-staging.svc:4000/keycloak"
-      - name: KC_DB_USERNAME
-        value: "keycloak"
-      - name: KC_DB_PASSWORD
-        value: "keycloak_secure_password_123"
-    # Use command to override container entrypoint
-    command:
-      - "/opt/keycloak/bin/kc.sh"
-      - "start"
-      - "--hostname-strict=false"
+    # Production mode
+    production: true
+    # Admin user
+    auth:
+      adminUser: admin
+      adminPassword: "changeme123"
+      # Database config
+      database: mysql
+      databaseHost: pm-tp-infra-tidb-tidb.pm-tp-staging.svc
+      databasePort: 4000
+      databaseName: keycloak
+      databaseUser: keycloak
+      databasePassword: "keycloak_secure_password_123"
+    # HTTP settings
+    http:
+      relativePath: /auth
+    # Disable hostname strict for dev
+    proxy: edge
+    # Resources
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
 
 # Prometheus
 prometheus:
