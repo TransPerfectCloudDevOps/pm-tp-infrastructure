@@ -144,7 +144,7 @@ keycloak:
     # Database configuration
     database:
       vendor: mysql
-      hostname: pm-tp-infra-tidb-tidb.pm-tp-infra.svc
+      hostname: pm-tp-infra-tidb-tidb.pm-tp-staging.svc
       port: 4000
       database: keycloak
       username: keycloak
@@ -164,7 +164,7 @@ keycloak:
       - name: KC_DB
         value: "mysql"
       - name: KC_DB_URL
-        value: "jdbc:mysql://pm-tp-infra-tidb-tidb.pm-tp-infra.svc:4000/keycloak"
+        value: "jdbc:mysql://pm-tp-infra-tidb-tidb.pm-tp-staging.svc:4000/keycloak"
       - name: KC_DB_USERNAME
         value: "keycloak"
       - name: KC_DB_PASSWORD
