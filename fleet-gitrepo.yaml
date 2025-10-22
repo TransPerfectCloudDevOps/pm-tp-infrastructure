@@ -10,7 +10,11 @@ spec:
     - crds      # CRDs bundle - deployed first (no leading slash)
     - .         # Main infrastructure - depends on CRDs (current directory)
   targets:
-    - clusterSelector: {}
+    - name: infra
+      clusterSelector:
+        matchLabels:
+          env: staging
+      namespace: pm-tp-infra
   pollingInterval: 120s
   # Allow Fleet to access Helm chart repositories for dependencies
   helmRepoURLRegex: "https://.*"
