@@ -1,0 +1,52 @@
+replicas: 1
+
+# Database configuration - cross-namespace access to TiDB in pm-tp-staging
+database:
+  vendor: mysql
+  hostname: pm-tp-infra-tidb-tidb.pm-tp-staging.svc.cluster.local
+  port: 4000
+  database: keycloak
+  username: keycloak
+  password: "keycloak_secure_password_123"
+
+# Admin credentials
+extraEnv: |
+  - name: KEYCLOAK_ADMIN
+    value: "admin"
+  - name: KEYCLOAK_ADMIN_PASSWORD
+    value: "changeme123"
+  - name: KC_HTTP_ENABLED
+    value: "true"
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
+  - name: KC_PROXY
+    value: "edge"
+  - name: KC_DB
+    value: "mysql"
+  - name: KC_DB_URL
+    value: "jdbc:mysql://pm-tp-infra-tidb-tidb.pm-tp-staging.svc.cluster.local:4000/keycloak"
+  - name: KC_DB_USERNAME
+    value: "keycloak"
+  - name: KC_DB_PASSWORD
+    value: "keycloak_secure_password_123"
+
+# Resources
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+# Service configuration
+service:
+  type: ClusterIP
+  ports:
+    http: 80
+    https: 443
+
+# Ingress (optional - for external access)
+# ingress:
+#   enabled: true
+#   hostname: keycloak.example.com
