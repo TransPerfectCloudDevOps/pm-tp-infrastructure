@@ -166,6 +166,11 @@ keycloak:
       limits:
         cpu: 500m
         memory: 1Gi
+    # Custom command to start Keycloak
+    command:
+      - /opt/bitnami/keycloak/bin/kc.sh
+      - start
+      - --hostname-strict=false
 
 # Prometheus
 prometheus:
