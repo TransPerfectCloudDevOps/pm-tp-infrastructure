@@ -169,10 +169,11 @@ keycloak:
         value: "keycloak"
       - name: KC_DB_PASSWORD
         value: "keycloak_secure_password_123"
-    # Keycloak startup arguments
-    args:
-      - start
-      - --hostname-strict=false
+    # Use command to override container entrypoint
+    command:
+      - "/opt/keycloak/bin/kc.sh"
+      - "start"
+      - "--hostname-strict=false"
 
 # Prometheus
 prometheus:
