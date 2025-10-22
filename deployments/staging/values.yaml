@@ -133,9 +133,8 @@ opensearch:
         memory: 2Gi
 
 # Keycloak - Identity and Access Management
-# TEMPORARILY DISABLED - chart not accepting command/args properly
 keycloak:
-  enabled: false
+  enabled: true
   chart:
     repo: https://codecentric.github.io/helm-charts
     name: keycloakx
@@ -170,11 +169,10 @@ keycloak:
         value: "keycloak"
       - name: KC_DB_PASSWORD
         value: "keycloak_secure_password_123"
-    # Use command to override container entrypoint
-    command:
-      - "/bin/bash"
-      - "-c"
-      - "/opt/keycloak/bin/kc.sh start --optimized"
+    # Keycloak startup arguments
+    args:
+      - start
+      - --hostname-strict=false
 
 # Prometheus
 prometheus:
