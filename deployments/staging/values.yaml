@@ -116,21 +116,21 @@ nats:
 
 # OpenSearch - Search Engine
 # Temporarily disabled - requires vm.max_map_count=262144 on nodes
-opensearch:
-  enabled: false
-  chart:
-    repo: https://opensearch-project.github.io/helm-charts/
-    name: opensearch
-    version: "2.x.x"
-  values:
-    replicas: 3
-    minimumMasterNodes: 2
-    persistence:
-      size: 30Gi
-    resources:
-      requests:
-        cpu: 1000m
-        memory: 2Gi
+# opensearch:
+#   enabled: false
+#   chart:
+#     repo: https://opensearch-project.github.io/helm-charts/
+#     name: opensearch
+#     version: "2.x.x"
+#   values:
+#     replicas: 3
+#     minimumMasterNodes: 2
+#     persistence:
+#       size: 30Gi
+#     resources:
+#       requests:
+#         cpu: 1000m
+#         memory: 2Gi
 
 # Keycloak - Identity and Access Management (removed from Fleet - deployed manually)
 # keycloak:
@@ -172,3 +172,28 @@ grafana:
             type: prometheus
             url: http://prometheus-server
             isDefault: true
+
+# OpenSearch
+opensearch:
+  enabled: true
+  values:
+    clusterName: "opensearch-cluster"
+    nodeGroup: "master"
+    masterService: "opensearch-cluster-master"
+    replicas: 3
+    persistence:
+      enabled: true
+      size: 30Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    opensearchJavaOpts: "-Xmx1g -Xms1g"
+    extraEnvs:
+      - name: "OPENSEARCH_JAVA_OPTS"
+        value: "-Xmx1g -Xms1g"
+    securityConfig:
+      enabled: false  # Disable security for staging simplicity
