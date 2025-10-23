@@ -197,3 +197,5 @@ opensearch:
         value: "-Xmx1g -Xms1g"
     securityConfig:
       enabled: false  # Disable security for staging simplicity
+    sysctlInitContainer:
+      enabled: true
