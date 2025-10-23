@@ -1,10 +1,10 @@
 dependencies:
 - name: tidb-operator
   repository: https://charts.pingcap.org/
-  version: v1.5.5
+  version: v1.6.3
 - name: valkey
   repository: https://valkey.io/valkey-helm/
-  version: 0.7.5
+  version: 0.7.6
 - name: minio
   repository: https://charts.min.io/
   version: 5.0.15
@@ -23,5 +23,5 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 7.0.22
-digest: sha256:e339a685ba45bc18aee192c5fdb14ef09168ffea8dc7e6c2e0cb83abceff87c8
-generated: "2025-10-20T14:21:54.06784-05:00"
+digest: sha256:5dbf3c22683814843d967678aaafe2832513deaa2e34c37d5163f8d61f1d4051
+generated: "2025-10-23T13:15:59.754102-05:00"
