@@ -115,6 +115,18 @@ EOF
 
 **Note**: This fix may need to be reapplied after Fleet redeploys the infrastructure.
 
+### Internal Configuration Fix
+
+After deployment, Harbor's internal configuration may still use default hostnames. If Harbor generates incorrect URLs or redirects, update the external endpoint:
+
+```bash
+# Update Harbor's external endpoint configuration
+kubectl patch configmap pm-tp-infra-harbor-core -n pm-tp-staging --type merge -p '{"data":{"EXT_ENDPOINT":"https://harbor.rancher-poc.1.todevopssandbox.com"}}'
+
+# Restart Harbor core to apply changes
+kubectl delete pod -l app=harbor,component=core -n pm-tp-staging
+```
+
 ## Creating a New Cluster
 
 Follow these steps to launch a new Kubernetes cluster ready for PM-TP infrastructure deployment:
