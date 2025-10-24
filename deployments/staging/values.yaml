@@ -188,6 +188,7 @@ harbor:
         secret:
           secretName: harbor-tls-secret
       ingress:
+        enabled: false
         hosts:
           core: harbor.rancher-poc.1.todevopssandbox.com
         controller: default
