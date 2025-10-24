@@ -20,8 +20,7 @@ curl -s https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/refs/hea
 # Modify the YAML: set keycloak service to ClusterIP and add management port
 echo "🔧 Modifying YAML for ClusterIP service and health port..."
 sed -i.bak '0,/type: ClusterIP/ s/type: ClusterIP/type: ClusterIP/' keycloak-manual/keycloak.yaml  # Ensure it's ClusterIP
-# Add management port to StatefulSet
-sed -i.bak '/ports:/a\            - name: management\n              containerPort: 9000' keycloak-manual/keycloak.yaml
+# Management port is already included in the downloaded YAML
 
 # Install cert-manager if not present
 echo "🔐 Installing cert-manager for Let's Encrypt..."
@@ -107,27 +106,17 @@ echo "✅ Keycloak deployment complete!"
 echo "🔗 Access URL: https://keycloak.rancher-poc.1.todevopssandbox.com"
 echo "👤 Admin credentials: admin / admin"
 echo "📋 DNS: Ensure A record points to a node external IP (e.g., 34.221.220.254)"
-done
-
-if [ -z "$LB_IP" ]; then
-  echo "⚠️  LoadBalancer IP not found within timeout. Check manually:"
-  echo "kubectl get svc keycloak -n keycloak"
-  echo "kubectl describe svc keycloak -n keycloak"
-fi
-
 echo ""
 echo "🎉 Keycloak deployment complete!"
 echo ""
 echo "🔑 Access Keycloak:"
-echo "   Internal: kubectl port-forward svc/keycloak 8080:8080 -n keycloak"
-echo "   External: http://$LB_IP (after LoadBalancer IP is assigned)"
+echo "   External: https://keycloak.rancher-poc.1.todevopssandbox.com"
 echo ""
 echo "👤 Default admin credentials:"
 echo "   Username: admin"
 echo "   Password: admin"
 echo ""
 echo "📝 Next steps:"
-echo "1. Wait for LoadBalancer IP to be assigned"
-echo "2. Set up DNS A record: keycloak.yourdomain.com -> $LB_IP"
-echo "3. Access Keycloak and change default password"
-echo "4. Configure realms and clients for your application"
+echo "1. Wait for certificate to be issued"
+echo "2. Access Keycloak and change default password"
+echo "3. Configure realms and clients for your application"
