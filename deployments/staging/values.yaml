@@ -187,6 +187,7 @@ harbor:
       ingress:
         hosts:
           core: harbor.rancher-poc.1.todevopssandbox.com
+        host: harbor.rancher-poc.1.todevopssandbox.com
         controller: default
     externalURL: https://harbor.rancher-poc.1.todevopssandbox.com
     harborAdminPassword: "Harbor12345"
