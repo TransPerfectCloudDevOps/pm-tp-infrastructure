@@ -4,11 +4,11 @@
 # TiDB Operator
 # The operator manages TiDB clusters. The actual TiDB cluster is created separately.
 tidb:
-  enabled: true
+  enabled: false  # Disabled due to operator compatibility issues
   chart:
     repo: https://charts.pingcap.org/
     name: tidb-operator
-    version: "1.5.0"
+    version: "~1.6.0"
   values:
     # Disable scheduler - it has config compatibility issues
     scheduler:
@@ -26,7 +26,7 @@ tidb:
 
 # TiDB Cluster - Staging configuration with reduced resources
 tidbCluster:
-  enabled: true
+  enabled: false  # Disabled due to operator issues
   pd:
     replicas: 3
     storage: "10Gi"
@@ -173,29 +173,94 @@ grafana:
             url: http://prometheus-server
             isDefault: true
 
-# OpenSearch
-opensearch:
+# Harbor - Container Registry
+harbor:
   enabled: true
   values:
-    clusterName: "opensearch-cluster"
-    nodeGroup: "master"
-    masterService: "opensearch-cluster-master"
-    replicas: 3
+    expose:
+      type: ingress
+      tls:
+        enabled: true
+        certSource: secret
+        secret:
+          secretName: harbor-tls-secret
+      ingress:
+        hosts:
+          core: harbor.rancher-poc.1.todevopssandbox.com
+        controller: default
+    externalURL: https://harbor.rancher-poc.1.todevopssandbox.com
+    harborAdminPassword: "Harbor12345"
     persistence:
       enabled: true
-      size: 30Gi
-    resources:
-      requests:
-        cpu: 500m
-        memory: 1Gi
-      limits:
-        cpu: 1000m
-        memory: 2Gi
-    opensearchJavaOpts: "-Xmx1g -Xms1g"
-    extraEnvs:
-      - name: "OPENSEARCH_JAVA_OPTS"
-        value: "-Xmx1g -Xms1g"
-    securityConfig:
-      enabled: false  # Disable security for staging simplicity
-    sysctlInitContainer:
-      enabled: true
+      resourcePolicy: "keep"
+      persistentVolumeClaim:
+        registry:
+          size: 10Gi
+        chartmuseum:
+          size: 5Gi
+        jobservice:
+          size: 1Gi
+        database:
+          size: 1Gi
+        redis:
+          size: 1Gi
+        trivy:
+          size: 5Gi
+    core:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+    jobservice:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 300m
+          memory: 256Mi
+    registry:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+    portal:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 300m
+          memory: 256Mi
+    database:
+      type: internal
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 300m
+          memory: 512Mi
+    redis:
+      type: internal
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 300m
+          memory: 256Mi
+    trivy:
+      enabled: false  # Disabled for staging to save resources
+    notary:
+      enabled: false

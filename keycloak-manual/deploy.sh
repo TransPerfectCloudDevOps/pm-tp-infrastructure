@@ -37,13 +37,13 @@ cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-staging
+  name: letsencrypt-prod
 spec:
   acme:
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: admin@todevopssandbox.com  # Update with your email
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: erik.hanson@transperfect.com  # Update with your email
     privateKeySecretRef:
-      name: letsencrypt-staging
+      name: letsencrypt-prod
     solvers:
     - http01:
         ingress:
@@ -59,7 +59,7 @@ metadata:
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
   - keycloak.rancher-poc.1.todevopssandbox.com

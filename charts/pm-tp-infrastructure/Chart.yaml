@@ -47,3 +47,8 @@ dependencies:
     repository: https://grafana.github.io/helm-charts
     version: "~7.0.0"
     condition: grafana.enabled
+    
+  - name: harbor
+    repository: https://helm.goharbor.io
+    version: "~1.0.0"
+    condition: harbor.enabled
