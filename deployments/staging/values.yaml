@@ -178,7 +178,7 @@ harbor:
   enabled: true
   values:
     expose:
-      type: ingress
+      type: clusterIP
       tls:
         enabled: true
         certSource: secret
