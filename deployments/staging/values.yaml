@@ -180,6 +180,8 @@ harbor:
     global:
       hosts:
         core: harbor.rancher-poc.1.todevopssandbox.com
+        portal: harbor.rancher-poc.1.todevopssandbox.com
+        registry: harbor.rancher-poc.1.todevopssandbox.com
     expose:
       type: ingress
       tls:
@@ -193,6 +195,7 @@ harbor:
           core: harbor.rancher-poc.1.todevopssandbox.com
         controller: default
     externalURL: https://harbor.rancher-poc.1.todevopssandbox.com
+    hostname: harbor.rancher-poc.1.todevopssandbox.com
     harborAdminPassword: "Harbor12345"
     persistence:
       enabled: true
