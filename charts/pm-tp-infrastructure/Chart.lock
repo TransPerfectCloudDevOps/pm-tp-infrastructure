@@ -23,5 +23,8 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 7.0.22
-digest: sha256:5dbf3c22683814843d967678aaafe2832513deaa2e34c37d5163f8d61f1d4051
-generated: "2025-10-23T13:15:59.754102-05:00"
+- name: harbor
+  repository: https://helm.goharbor.io
+  version: 1.15.2
+digest: sha256:00a0800839ede381db759ddb278f583299aa16cb3ad6a5d217b60efecc03b47c
+generated: "2025-10-24T13:37:42.826324-05:00"

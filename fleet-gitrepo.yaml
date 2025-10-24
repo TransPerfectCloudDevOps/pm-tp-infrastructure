@@ -8,7 +8,8 @@ spec:
   branch: main
   paths:
     - crds      # CRDs bundle - deployed first (no leading slash)
-    - .         # Main infrastructure - depends on CRDs (current directory)
+    - deployments/fleet  # Traefik bundle - deployed second
+    - .         # Main infrastructure - deployed last (current directory)
   targets:
     - name: infra
       clusterSelector:

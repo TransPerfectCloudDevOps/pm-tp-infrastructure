@@ -1,0 +1,38 @@
+# Traefik Fleet Bundle
+# Deploys Traefik ingress controller with CRDs
+# This deploys before the main infrastructure bundle
+
+defaultNamespace: traefik-system
+
+# Deploy to all environments
+targets:
+  - name: dev
+    clusterSelector:
+      matchLabels:
+        env: dev
+    defaultNamespace: traefik-system
+
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        env: staging
+    defaultNamespace: traefik-system
+
+  - name: prod
+    clusterSelector:
+      matchLabels:
+        env: prod
+    defaultNamespace: traefik-system
+
+# Use the official Traefik Helm chart
+helm:
+  chart: traefik/traefik
+  version: "~26.0.0"
+  releaseName: traefik
+  timeoutSeconds: 600
+  valuesFiles:
+    - traefik-values.yaml
+
+# Ensure CRDs are installed
+install:
+  crds: true

@@ -271,3 +271,122 @@ harbor:
       enabled: false  # Disabled for staging to save resources
     notary:
       enabled: false
+
+# Traefik - Ingress Controller
+traefik:
+  enabled: true
+  values:
+    deployment:
+      replicas: 1
+      annotations: {}
+      podAnnotations: {}
+      additionalContainers: []
+      initContainers: []
+    ports:
+      traefik:
+        port: 9000
+        expose:
+          default: true
+        exposedPort: 9000
+        protocol: TCP
+      web:
+        port: 8000
+        expose:
+          default: true
+        exposedPort: 80
+        protocol: TCP
+        redirectTo:
+          port: websecure
+      websecure:
+        port: 8443
+        expose:
+          default: true
+        exposedPort: 443
+        protocol: TCP
+        tls:
+          enabled: true
+    ingressRoute:
+      dashboard:
+        enabled: false
+    providers:
+      kubernetesCRD:
+        enabled: true
+        allowCrossNamespace: true
+        allowExternalNameServices: true
+      kubernetesIngress:
+        enabled: true
+        allowExternalNameServices: true
+        publishedService:
+          enabled: false
+    rbac:
+      enabled: true
+    serviceAccount:
+      name: ""
+    service:
+      enabled: true
+      type: LoadBalancer
+      annotations: {}
+      labels: {}
+      spec:
+        loadBalancerIP: ""
+      externalIPs: []
+      loadBalancerSourceRanges: []
+    persistence:
+      enabled: false
+    logs:
+      general:
+        level: INFO
+      access:
+        enabled: false
+    tracing:
+      instana: {}
+      jaeger: {}
+      zipkin: {}
+      datadog: {}
+      haystack: {}
+    metrics:
+      prometheus: {}
+      datadog: {}
+      influxdb: {}
+      statsd: {}
+    pilot:
+      enabled: false
+    experimental:
+      plugins:
+        enabled: false
+    additionalArguments:
+      - "--certificatesresolvers.le.acme.email=admin@yourdomain.com"
+      - "--certificatesresolvers.le.acme.storage=/data/acme.json"
+      - "--certificatesresolvers.le.acme.tlschallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+    env: []
+    envFrom: []
+    hostNetwork: false
+    securityContext:
+      capabilities:
+        drop: [ALL]
+        add: [NET_BIND_SERVICE]
+      readOnlyRootFilesystem: true
+      runAsGroup: 65532
+      runAsNonRoot: true
+      runAsUser: 65532
+    podSecurityContext:
+      fsGroup: 65532
+    terminationGracePeriodSeconds: 60
+    affinity: {}
+    tolerations: []
+    nodeSelector: {}
+    topologySpreadConstraints: []
+    dnsPolicy: ClusterFirst
+    dnsConfig: {}
+    priorityClassName: ""
+    podDisruptionBudget:
+      enabled: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi

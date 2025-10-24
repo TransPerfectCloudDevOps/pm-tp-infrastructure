@@ -29,6 +29,7 @@ This repository manages the deployment of:
 - **NATS**: Cloud-native messaging system
 - **OpenSearch**: Search and analytics engine
 - **Harbor**: Container registry with TLS
+- **Traefik**: Ingress controller with middleware support
 - **Keycloak**: Identity and access management
 - **Prometheus**: Monitoring and alerting
 - **Grafana**: Metrics visualization
@@ -124,8 +125,37 @@ After deployment, Harbor's internal configuration may still use default hostname
 kubectl patch configmap pm-tp-infra-harbor-core -n pm-tp-staging --type merge -p '{"data":{"EXT_ENDPOINT":"https://harbor.rancher-poc.1.todevopssandbox.com"}}'
 
 # Restart Harbor core to apply changes
-kubectl delete pod -l app=harbor,component=core -n pm-tp-staging
+    delete pod -l app=harbor,component=core -n pm-tp-staging
 ```
+
+## Traefik Configuration
+
+Traefik is deployed as an ingress controller with middleware support for advanced routing capabilities.
+
+### Features Enabled
+
+- **Kubernetes CRD Provider**: Enables Traefik IngressRoute and Middleware resources
+- **Cross-namespace support**: Allows routing across namespaces
+- **Let's Encrypt integration**: Automatic TLS certificate management
+- **LoadBalancer service**: Exposes Traefik externally
+- **Middleware CRDs**: Enables advanced routing features (auth, rate limiting, etc.)
+
+### Deployment Order
+
+Traefik is deployed as a separate Fleet bundle that runs **before** the main infrastructure. This ensures:
+
+1. Traefik CRDs are available for the main infrastructure components
+2. The pm-tp application can use Traefik middlewares immediately
+3. No dependency conflicts during deployment
+
+### Namespace
+
+Traefik is deployed in the `traefik-system` namespace.
+
+### Configuration Files
+
+- `deployments/fleet/traefik-fleet.yaml`: Fleet bundle definition
+- `deployments/{env}/traefik-values.yaml`: Environment-specific values
 
 ## Creating a New Cluster
 
