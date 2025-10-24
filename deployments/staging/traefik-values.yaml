@@ -4,22 +4,19 @@ deployment:
 ports:
   traefik:
     port: 9000
-    expose:
-      default: true
+    expose: true
     exposedPort: 9000
     protocol: TCP
   web:
     port: 8000
-    expose:
-      default: true
+    expose: true
     exposedPort: 80
     protocol: TCP
     redirectTo:
       port: websecure
   websecure:
     port: 8443
-    expose:
-      default: true
+    expose: true
     exposedPort: 443
     protocol: TCP
     tls:
