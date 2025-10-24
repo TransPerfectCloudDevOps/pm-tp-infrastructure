@@ -35,7 +35,15 @@ This repository manages the deployment of:
 
 ## Harbor Configuration
 
-Harbor is deployed with TLS encryption using Let's Encrypt certificates. Due to a configuration issue with the Harbor Helm chart, the ingress may need manual correction after deployment.
+Harbor is deployed with TLS encryption using Let's Encrypt certificates.
+
+### Login Credentials (Demo)
+
+For demo purposes, use these credentials to access Harbor:
+
+- **URL**: https://harbor.rancher-poc.1.todevopssandbox.com
+- **Username**: `admin`
+- **Password**: `Harbor12345`
 
 ### Manual Ingress Fix
 
