@@ -28,9 +28,84 @@ This repository manages the deployment of:
 - **MinIO**: S3-compatible object storage
 - **NATS**: Cloud-native messaging system
 - **OpenSearch**: Search and analytics engine
+- **Harbor**: Container registry with TLS
 - **Keycloak**: Identity and access management
 - **Prometheus**: Monitoring and alerting
 - **Grafana**: Metrics visualization
+
+## Harbor Configuration
+
+Harbor is deployed with TLS encryption using Let's Encrypt certificates. Due to a configuration issue with the Harbor Helm chart, the ingress may need manual correction after deployment.
+
+### Manual Ingress Fix
+
+If Harbor is not accessible with a trusted certificate, apply the correct ingress configuration:
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pm-tp-infra-harbor-ingress
+  namespace: pm-tp-staging
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - host: harbor.rancher-poc.1.todevopssandbox.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: pm-tp-infra-harbor-core
+            port:
+              number: 80
+        path: /api/
+        pathType: Prefix
+      - backend:
+          service:
+            name: pm-tp-infra-harbor-core
+            port:
+              number: 80
+        path: /service/
+        pathType: Prefix
+      - backend:
+          service:
+            name: pm-tp-infra-harbor-core
+            port:
+              number: 80
+        path: /v2/
+        pathType: Prefix
+      - backend:
+          service:
+            name: pm-tp-infra-harbor-core
+            port:
+              number: 80
+        path: /chartrepo/
+        pathType: Prefix
+      - backend:
+          service:
+            name: pm-tp-infra-harbor-core
+            port:
+              number: 80
+        path: /c/
+        pathType: Prefix
+      - backend:
+          service:
+            name: pm-tp-infra-harbor-portal
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - harbor.rancher-poc.1.todevopssandbox.com
+    secretName: harbor-tls-secret
+EOF
+```
+
+**Note**: This fix may need to be reapplied after Fleet redeploys the infrastructure.
 
 ## Creating a New Cluster
 
