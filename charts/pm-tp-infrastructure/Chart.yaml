@@ -52,8 +52,3 @@ dependencies:
     repository: https://helm.goharbor.io
     version: "~1.15.0"
     condition: harbor.enabled
-    
-  - name: traefik
-    repository: https://helm.traefik.io/traefik
-    version: "~26.0.0"
-    condition: traefik.enabled
