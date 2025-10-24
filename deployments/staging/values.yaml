@@ -177,15 +177,19 @@ grafana:
 harbor:
   enabled: true
   values:
+    global:
+      hosts:
+        core: harbor.rancher-poc.1.todevopssandbox.com
     expose:
-      type: clusterIP
+      type: ingress
       tls:
         enabled: true
         certSource: secret
         secret:
           secretName: harbor-tls-secret
       ingress:
-        host: harbor.rancher-poc.1.todevopssandbox.com
+        hosts:
+          core: harbor.rancher-poc.1.todevopssandbox.com
         controller: default
     externalURL: https://harbor.rancher-poc.1.todevopssandbox.com
     harborAdminPassword: "Harbor12345"
