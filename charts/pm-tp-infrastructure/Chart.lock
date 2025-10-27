@@ -26,5 +26,8 @@ dependencies:
 - name: harbor
   repository: https://helm.goharbor.io
   version: 1.15.2
-digest: sha256:00a0800839ede381db759ddb278f583299aa16cb3ad6a5d217b60efecc03b47c
-generated: "2025-10-24T13:37:42.826324-05:00"
+- name: traefik
+  repository: https://helm.traefik.io/traefik
+  version: 26.0.0
+digest: sha256:36fc80b7cd411e5959eec8ceda6af063b2c7591fbdc684e1b494de98cd166f72
+generated: "2025-10-27T16:26:26.97631-05:00"
