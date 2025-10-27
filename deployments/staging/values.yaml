@@ -224,6 +224,9 @@ harbor:
           memory: 512Mi
     jobservice:
       replicas: 1
+      # Use Recreate strategy due to RWO volume constraints
+      strategy:
+        type: Recreate
       resources:
         requests:
           cpu: 100m
@@ -233,6 +236,9 @@ harbor:
           memory: 256Mi
     registry:
       replicas: 1
+      # Use Recreate strategy due to RWO volume constraints
+      strategy:
+        type: Recreate
       resources:
         requests:
           cpu: 200m
