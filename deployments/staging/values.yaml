@@ -3,8 +3,10 @@
 
 # TiDB Operator
 # The operator manages TiDB clusters. The actual TiDB cluster is created separately.
+# TEMPORARILY DISABLED - operator not reconciling TidbCluster resources
+# Will investigate and deploy separately
 tidb:
-  enabled: true
+  enabled: false
   chart:
     repo: https://charts.pingcap.org/
     name: tidb-operator
@@ -26,7 +28,7 @@ tidb:
 
 # TiDB Cluster - Staging configuration with reduced resources
 tidbCluster:
-  enabled: true
+  enabled: false
   pd:
     replicas: 3
     storage: "10Gi"
