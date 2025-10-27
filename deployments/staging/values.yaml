@@ -115,22 +115,23 @@ nats:
       replicas: 3
 
 # OpenSearch - Search Engine
-# Temporarily disabled - requires vm.max_map_count=262144 on nodes
-# opensearch:
-#   enabled: false
-#   chart:
-#     repo: https://opensearch-project.github.io/helm-charts/
-#     name: opensearch
-#     version: "2.x.x"
-#   values:
-#     replicas: 3
-#     minimumMasterNodes: 2
-#     persistence:
-#       size: 30Gi
-#     resources:
-#       requests:
-#         cpu: 1000m
-#         memory: 2Gi
+# IMPORTANT: Requires vm.max_map_count=262144 on all nodes
+# Run on each node: sudo sysctl -w vm.max_map_count=262144
+opensearch:
+  enabled: true
+  chart:
+    repo: https://opensearch-project.github.io/helm-charts/
+    name: opensearch
+    version: "2.x.x"
+  values:
+    replicas: 3
+    minimumMasterNodes: 2
+    persistence:
+      size: 30Gi
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
 
 # Keycloak - Identity and Access Management (removed from Fleet - deployed manually)
 # keycloak:
