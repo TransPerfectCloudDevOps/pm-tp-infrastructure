@@ -1,0 +1,50 @@
+{{- if .Values.opensearch.enabled }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Release.Name }}-set-vm-max-map-count
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: sysctl-setter
+spec:
+  selector:
+    matchLabels:
+      app: sysctl-setter
+  template:
+    metadata:
+      labels:
+        app: sysctl-setter
+    spec:
+      hostPID: true
+      hostNetwork: true
+      initContainers:
+      - name: sysctl-setter
+        image: busybox:latest
+        securityContext:
+          privileged: true
+        command:
+        - sh
+        - -c
+        - |
+          sysctl -w vm.max_map_count=262144
+          echo "vm.max_map_count set to 262144"
+        volumeMounts:
+        - name: sys
+          mountPath: /host-sys
+      containers:
+      - name: pause
+        image: gcr.io/google_containers/pause:3.1
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+      volumes:
+      - name: sys
+        hostPath:
+          path: /sys
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+{{- end }}
