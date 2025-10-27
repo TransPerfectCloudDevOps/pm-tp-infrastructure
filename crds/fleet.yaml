@@ -1,8 +1,13 @@
-# Fleet Bundle for TiDB CRDs Only
+# Fleet Bundle for TiDB and Traefik CRDs
 # This must be deployed before the main infrastructure bundle
 
 # Use defaultNamespace instead of namespace to allow cluster-scoped CRDs
 defaultNamespace: pm-tp-staging
+
+# Increase timeout for large CRD files
+# CRDs should apply quickly, but network delays can cause issues
+helm:
+  timeoutSeconds: 600
 
 # Match the same targets as main infrastructure
 targets:
