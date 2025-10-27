@@ -174,8 +174,10 @@ grafana:
             isDefault: true
 
 # Harbor - Container Registry
+# Disabled for now - RWO volume conflicts with RollingUpdate strategy
+# Will revisit in a dedicated Harbor deployment project
 harbor:
-  enabled: true
+  enabled: false
   values:
     global:
       hosts:
@@ -225,7 +227,7 @@ harbor:
     jobservice:
       replicas: 1
       # Use Recreate strategy due to RWO volume constraints
-      strategy:
+      deploymentStrategy:
         type: Recreate
       resources:
         requests:
@@ -237,7 +239,7 @@ harbor:
     registry:
       replicas: 1
       # Use Recreate strategy due to RWO volume constraints
-      strategy:
+      deploymentStrategy:
         type: Recreate
       resources:
         requests:
