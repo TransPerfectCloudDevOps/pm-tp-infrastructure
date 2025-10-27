@@ -35,7 +35,8 @@ targets:
 
 # Use the official Traefik Helm chart
 helm:
-  chart: traefik/traefik
+  repo: https://helm.traefik.io/traefik
+  chart: traefik
   version: "~26.0.0"
   releaseName: traefik
   timeoutSeconds: 600
