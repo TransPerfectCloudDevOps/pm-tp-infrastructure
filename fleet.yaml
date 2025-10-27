@@ -10,7 +10,7 @@ defaultNamespace: pm-tp-infra
 helm:
   chart: ./charts/pm-tp-infrastructure
   releaseName: pm-tp-infra
-  timeoutSeconds: 1800
+  timeoutSeconds: 3600  # 60 minutes - increased for large Helm chart with many dependencies
   
 targets:
   - name: dev
