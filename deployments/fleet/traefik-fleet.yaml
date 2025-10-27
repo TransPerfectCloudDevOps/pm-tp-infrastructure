@@ -11,18 +11,27 @@ targets:
       matchLabels:
         env: dev
     defaultNamespace: traefik-system
+    helm:
+      valuesFiles:
+        - ../dev/traefik-values.yaml
 
   - name: staging
     clusterSelector:
       matchLabels:
         env: staging
     defaultNamespace: traefik-system
+    helm:
+      valuesFiles:
+        - ../staging/traefik-values.yaml
 
   - name: prod
     clusterSelector:
       matchLabels:
         env: prod
     defaultNamespace: traefik-system
+    helm:
+      valuesFiles:
+        - ../prod/traefik-values.yaml
 
 # Use the official Traefik Helm chart
 helm:
@@ -30,8 +39,6 @@ helm:
   version: "~26.0.0"
   releaseName: traefik
   timeoutSeconds: 600
-  valuesFiles:
-    - traefik-values.yaml
 
 # Ensure CRDs are installed
 install:
