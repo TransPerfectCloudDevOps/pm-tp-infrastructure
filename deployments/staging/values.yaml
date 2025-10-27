@@ -1,63 +1,31 @@
 # Staging Environment - Moderate Resources
 # HA configuration, production-like setup
 
-# TiDB Operator
-# The operator manages TiDB clusters. The actual TiDB cluster is created separately.
-# TEMPORARILY DISABLED - operator not reconciling TidbCluster resources
-# Will investigate and deploy separately
-tidb:
-  enabled: false
-  chart:
-    repo: https://charts.pingcap.org/
-    name: tidb-operator
-    version: "~1.6.0"
+# MariaDB - MySQL-compatible relational database
+mariadb:
+  enabled: true
   values:
-    # Disable scheduler - it has config compatibility issues
-    scheduler:
-      create: false
-    # Minimal resources for staging
-    controllerManager:
-      replicas: 1
+    auth:
+      rootPassword: "changeme123"
+      database: pmtp
+      username: pmtp
+      password: "changeme123"
+    primary:
+      persistence:
+        size: 20Gi
       resources:
         requests:
-          cpu: 100m
-          memory: 128Mi
-        limits:
-          cpu: 500m
+          cpu: 250m
           memory: 512Mi
-
-# TiDB Cluster - Staging configuration with reduced resources
-tidbCluster:
-  enabled: false
-  pd:
-    replicas: 3
-    storage: "10Gi"
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 500m
-        memory: 1Gi
-  tikv:
-    replicas: 3
-    storage: "50Gi"
-    resources:
-      requests:
-        cpu: 500m
-        memory: 2Gi
-      limits:
-        cpu: 1000m
-        memory: 4Gi
-  tidb:
-    replicas: 2
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 2Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+    metrics:
+      enabled: true
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
 
 # Valkey
 valkey:
