@@ -1,7 +1,4 @@
 dependencies:
-- name: mariadb
-  repository: https://charts.bitnami.com/bitnami
-  version: 18.0.6
 - name: valkey
   repository: https://valkey.io/valkey-helm/
   version: 0.7.6
@@ -29,5 +26,5 @@ dependencies:
 - name: traefik
   repository: https://helm.traefik.io/traefik
   version: 26.0.0
-digest: sha256:29838094b9c66cd7b5e6272fff4d674d898718b20cfd73bfb11cd24b6dd45746
-generated: "2025-10-27T16:42:50.591035-05:00"
+digest: sha256:367eae7b84cf1a44bc986cbb96c786ecbc1062c307468e064cdfeade44ddc076
+generated: "2025-10-28T11:54:05.509482-05:00"

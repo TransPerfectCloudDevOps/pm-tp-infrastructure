@@ -1,33 +1,23 @@
 # Staging Environment - Moderate Resources
 # HA configuration, production-like setup
 
-# MariaDB - MySQL-compatible relational database
-mariadb:
+# MySQL - Using official MySQL image (no Bitnami)
+mysql:
   enabled: true
-  values:
-    image:
-      tag: "11.4.3-debian-12-r2"  # Pin to a known working version
-    auth:
-      rootPassword: "changeme123"
-      database: pmtp
-      username: pmtp
-      password: "changeme123"
-    primary:
-      persistence:
-        size: 20Gi
-      resources:
-        requests:
-          cpu: 250m
-          memory: 512Mi
-        limits:
-          cpu: 1000m
-          memory: 2Gi
-    metrics:
-      enabled: true
-      resources:
-        requests:
-          cpu: 50m
-          memory: 64Mi
+  image: mysql
+  tag: "8.4"
+  rootPassword: "changeme123"
+  database: "pmtp"
+  user: "pmtp"
+  password: "changeme123"
+  storage: "20Gi"
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
 
 # Valkey
 valkey:
