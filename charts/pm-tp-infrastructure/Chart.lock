@@ -23,8 +23,8 @@ dependencies:
 - name: harbor
   repository: https://helm.goharbor.io
   version: 1.15.2
-- name: traefik
-  repository: https://helm.traefik.io/traefik
-  version: 26.0.0
-digest: sha256:367eae7b84cf1a44bc986cbb96c786ecbc1062c307468e064cdfeade44ddc076
-generated: "2025-10-28T11:54:05.509482-05:00"
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v1.16.5
+digest: sha256:f993a7d59c31be61c3dbb3c7628fc58b9bdc38f9355ef9827c2024ca461f5ed0
+generated: "2025-10-28T14:04:22.906649-05:00"

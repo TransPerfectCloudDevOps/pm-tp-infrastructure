@@ -23,16 +23,18 @@ This enables the OpenSearch Helm chart's `sysctlInitContainer` to automatically 
 
 This repository manages the deployment of:
 
-- **TiDB**: Distributed SQL database
+- **MySQL**: Relational database (official MySQL 8.4)
 - **Valkey**: Redis-compatible cache
 - **MinIO**: S3-compatible object storage
 - **NATS**: Cloud-native messaging system
 - **OpenSearch**: Search and analytics engine
+- **cert-manager**: Automatic TLS certificate management
 - **Harbor**: Container registry with TLS
-- **Traefik**: Ingress controller with middleware support
 - **Keycloak**: Identity and access management
 - **Prometheus**: Monitoring and alerting
 - **Grafana**: Metrics visualization
+
+**Note**: nginx ingress controller comes pre-installed with RKE2 and is used for all HTTP/HTTPS routing.
 
 ## MinIO Configuration
 
@@ -536,49 +538,30 @@ curl -k -u admin:admin https://localhost:9200/_cat/indices?v
 
 **Important Note**: The default credentials (`admin:admin`) should be changed in production environments. Refer to OpenSearch Security documentation for proper authentication setup.
 
-## Traefik Configuration
+## cert-manager Configuration
 
-Traefik is deployed as an ingress controller for HTTP/HTTPS routing with automatic TLS certificate management.
+cert-manager is deployed to automatically manage TLS certificates from Let's Encrypt for all ingress resources.
 
-### Connection Information
+### Overview
 
 **Staging Environment:**
-- **Service Name**: `pm-tp-infra-traefik.pm-tp-staging.svc.cluster.local`
-- **Type**: LoadBalancer
-- **HTTP Port**: `80` (NodePort: 31407) - Auto-redirects to HTTPS
-- **HTTPS Port**: `443` (NodePort: 32324)
-- **Dashboard Port**: `9000` (Internal only)
-- **Version**: Traefik 2.10.6
-- **Cluster IP**: 10.43.253.188
+- **Version**: ~1.16.0
+- **Namespace**: Deployed with infrastructure in `pm-tp-staging`
+- **ClusterIssuers**: `letsencrypt-staging` and `letsencrypt-prod`
+- **Email**: erik.hanson@transperfect.com
+- **Ingress Class**: nginx
+- **ACME Challenge**: HTTP-01
 
-### Accessing Traefik
+### ClusterIssuers
 
-**Via NodePort (when LoadBalancer IP is pending):**
-```bash
-# Get node IP
-kubectl get nodes -o wide
+cert-manager creates two ClusterIssuers automatically:
 
-# Access via NodePort (replace <NODE_IP> with actual node IP)
-curl http://<NODE_IP>:31407
-curl -k https://<NODE_IP>:32324
-```
+1. **letsencrypt-staging**: For testing (uses Let's Encrypt staging environment)
+2. **letsencrypt-prod**: For production certificates (uses Let's Encrypt production environment)
 
-**Via Port-Forward:**
-```bash
-# Forward HTTP port
-kubectl port-forward -n pm-tp-staging deployment/pm-tp-infra-traefik 8080:8000
+### Using cert-manager with Ingress
 
-# Forward HTTPS port
-kubectl port-forward -n pm-tp-infra deployment/pm-tp-infra-traefik 8443:8443
-
-# Access locally
-curl http://localhost:8080
-curl -k https://localhost:8443
-```
-
-### Using Traefik for Application Routing
-
-**Standard Kubernetes Ingress:**
+**Basic Ingress with automatic TLS:**
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -586,9 +569,9 @@ metadata:
   name: my-app-ingress
   namespace: pm-tp-staging
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  ingressClassName: nginx
   rules:
   - host: myapp.example.com
     http:
@@ -603,94 +586,121 @@ spec:
   tls:
   - hosts:
     - myapp.example.com
-    secretName: myapp-tls
+    secretName: myapp-tls  # cert-manager will create this secret
 ```
 
-**Traefik IngressRoute (CRD):**
+**Using staging issuer for testing:**
 ```yaml
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: my-app-route
+  name: my-app-ingress-test
   namespace: pm-tp-staging
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"  # Use staging for testing
 spec:
-  entryPoints:
-    - websecure
-  routes:
-  - match: Host(`myapp.example.com`)
-    kind: Rule
-    services:
-    - name: my-app
-      port: 80
+  ingressClassName: nginx
+  rules:
+  - host: test.myapp.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-app
+            port:
+              number: 80
   tls:
-    certResolver: le
+  - hosts:
+    - test.myapp.example.com
+    secretName: myapp-test-tls
 ```
 
-**Traefik Middleware Example:**
+**Manual Certificate resource:**
 ```yaml
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
+apiVersion: cert-manager.io/v1
+kind: Certificate
 metadata:
-  name: my-auth
+  name: my-app-cert
   namespace: pm-tp-staging
 spec:
-  basicAuth:
-    secret: auth-secret
-
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: my-app-with-auth
-  namespace: pm-tp-staging
-spec:
-  entryPoints:
-    - websecure
-  routes:
-  - match: Host(`myapp.example.com`)
-    kind: Rule
-    middlewares:
-    - name: my-auth
-    services:
-    - name: my-app
-      port: 80
-  tls:
-    certResolver: le
+  secretName: my-app-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - myapp.example.com
+  - www.myapp.example.com
 ```
+
+### Monitoring Certificates
+
+**Check certificate status:**
+```bash
+# List all certificates
+kubectl get certificates -n pm-tp-staging
+
+# Describe a specific certificate
+kubectl describe certificate myapp-tls -n pm-tp-staging
+
+# Check certificate ready status
+kubectl get certificate myapp-tls -n pm-tp-staging -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}'
+```
+
+**Check certificate requests:**
+```bash
+# List certificate requests
+kubectl get certificaterequest -n pm-tp-staging
+
+# View certificate request details
+kubectl describe certificaterequest myapp-tls-xyz -n pm-tp-staging
+```
+
+**Check ClusterIssuers:**
+```bash
+# List ClusterIssuers
+kubectl get clusterissuer
+
+# Check issuer status
+kubectl describe clusterissuer letsencrypt-prod
+```
+
+**View cert-manager logs:**
+```bash
+# View controller logs
+kubectl logs -n pm-tp-staging -l app.kubernetes.io/name=cert-manager -f
+
+# View webhook logs
+kubectl logs -n pm-tp-staging -l app.kubernetes.io/component=webhook -f
+```
+
+### Troubleshooting
+
+**Certificate not being issued:**
+1. Check the Certificate status: `kubectl describe certificate <name> -n <namespace>`
+2. Check CertificateRequest: `kubectl get certificaterequest -n <namespace>`
+3. Check cert-manager logs for errors
+4. Ensure DNS points to the ingress controller
+5. Verify HTTP-01 challenge can reach `/.well-known/acme-challenge/`
+
+**Rate limiting from Let's Encrypt:**
+- Use `letsencrypt-staging` issuer for testing
+- Let's Encrypt has rate limits: 50 certificates per domain per week
+- Staging environment has higher rate limits for testing
+
+**Common issues:**
+- DNS not pointing to ingress: Ensure A record points to ingress external IP
+- Ingress class mismatch: Ensure `ingressClassName: nginx` is set
+- Wrong issuer: Double-check the `cert-manager.io/cluster-issuer` annotation
 
 ### Features
 
-- **Automatic HTTPS Redirect**: HTTP traffic automatically redirects to HTTPS
-- **Let's Encrypt Integration**: Automatic TLS certificate provisioning
-- **Kubernetes CRD Support**: IngressRoute and Middleware custom resources
-- **Cross-Namespace Routing**: Can route to services in different namespaces
-- **Dynamic Configuration**: Watches Kubernetes resources for automatic updates
-- **Middleware Support**: Authentication, rate limiting, headers, and more
-
-### Monitoring
-
-**Check Traefik logs:**
-```bash
-kubectl logs -n pm-tp-staging deployment/pm-tp-infra-traefik -f
-```
-
-**View Traefik dashboard (if enabled):**
-```bash
-# Port-forward the dashboard
-kubectl port-forward -n pm-tp-staging deployment/pm-tp-infra-traefik 9000:9000
-
-# Access at http://localhost:9000/dashboard/
-```
-
-**List all IngressRoutes:**
-```bash
-kubectl get ingressroute -A
-```
-
-**List all Middlewares:**
-```bash
-kubectl get middleware -A
-```
+- **Automatic Certificate Renewal**: Certificates auto-renew before expiration
+- **HTTP-01 Challenge**: Uses nginx ingress for ACME challenges
+- **Multi-domain Certificates**: Support for multiple domains in one certificate
+- **ClusterIssuers**: Available to all namespaces in the cluster
+- **Automatic Secret Creation**: TLS secrets created and managed automatically
 
 ## Harbor Configuration
 
@@ -785,35 +795,6 @@ kubectl patch configmap pm-tp-infra-harbor-core -n pm-tp-staging --type merge -p
 # Restart Harbor core to apply changes
     delete pod -l app=harbor,component=core -n pm-tp-staging
 ```
-
-## Traefik Configuration
-
-Traefik is deployed as an ingress controller with middleware support for advanced routing capabilities.
-
-### Features Enabled
-
-- **Kubernetes CRD Provider**: Enables Traefik IngressRoute and Middleware resources
-- **Cross-namespace support**: Allows routing across namespaces
-- **Let's Encrypt integration**: Automatic TLS certificate management
-- **LoadBalancer service**: Exposes Traefik externally
-- **Middleware CRDs**: Enables advanced routing features (auth, rate limiting, etc.)
-
-### Deployment Order
-
-Traefik is deployed as a separate Fleet bundle that runs **before** the main infrastructure. This ensures:
-
-1. Traefik CRDs are available for the main infrastructure components
-2. The pm-tp application can use Traefik middlewares immediately
-3. No dependency conflicts during deployment
-
-### Namespace
-
-Traefik is deployed in the `traefik-system` namespace.
-
-### Configuration Files
-
-- `deployments/fleet/traefik-fleet.yaml`: Fleet bundle definition
-- `deployments/{env}/traefik-values.yaml`: Environment-specific values
 
 ## Creating a New Cluster
 
