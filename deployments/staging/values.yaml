@@ -19,25 +19,29 @@ mysql:
       cpu: 1000m
       memory: 2Gi
 
-# Valkey
+# Valkey - Redis-compatible cache
 valkey:
   enabled: true
-  chart:
-    repo: https://valkey.io/valkey-helm/
-    name: valkey
-    version: "0.7.0"
-  values:
-    architecture: replication
-    auth:
-      enabled: true
-      password: "changeme123"
-    master:
-      persistence:
-        size: 10Gi
-    replica:
-      replicaCount: 2
-      persistence:
-        size: 10Gi
+  # Enable persistent storage
+  dataStorage:
+    enabled: true
+    requestedSize: 10Gi
+    keepPvc: true
+  # Enable authentication with ACL
+  auth:
+    enabled: true
+    aclConfig: |
+      user default on >changeme123 ~* &* +@all
+  # Run with 1 replica for staging (replication architecture not supported by this chart)
+  replicaCount: 1
+  # Resource limits
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 # MinIO
 minio:
