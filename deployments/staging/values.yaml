@@ -5,6 +5,8 @@
 mariadb:
   enabled: true
   values:
+    image:
+      tag: "11.4.3-debian-12-r2"  # Pin to a known working version
     auth:
       rootPassword: "changeme123"
       database: pmtp
