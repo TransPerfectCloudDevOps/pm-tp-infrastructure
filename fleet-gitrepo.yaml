@@ -8,12 +8,8 @@ spec:
   branch: main
   paths:
     - .         # Main infrastructure (cert-manager installs its own CRDs)
-  targets:
-    - name: infra
-      clusterSelector:
-        matchLabels:
-          env: staging
-      namespace: pm-tp-infra
+  # No targets specified here - Fleet will use fleet.yaml in the repo
+  # which defines targets for dev/staging/prod with proper values files
   pollingInterval: 120s
   # Allow Fleet to access Helm chart repositories for dependencies
   helmRepoURLRegex: "https://.*"
