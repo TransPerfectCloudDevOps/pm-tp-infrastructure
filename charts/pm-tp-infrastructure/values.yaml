@@ -13,42 +13,6 @@ minio:
 # All other components disabled by default
 # Enable them in deployment-specific values files
 
-tidb:
-  enabled: false
-
-# TiDB Cluster configuration (used when tidb.enabled = true)
-tidbCluster:
-  enabled: false  # Enable after operator CRDs are installed
-  pd:
-    replicas: 3
-    storage: "10Gi"
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 2Gi
-  tikv:
-    replicas: 3
-    storage: "50Gi"
-    resources:
-      requests:
-        cpu: 500m
-        memory: 2Gi
-      limits:
-        cpu: 2000m
-        memory: 8Gi
-  tidb:
-    replicas: 2
-    resources:
-      requests:
-        cpu: 500m
-        memory: 1Gi
-      limits:
-        cpu: 2000m
-        memory: 4Gi
-
 valkey:
   enabled: false
 

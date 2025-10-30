@@ -1,18 +1,15 @@
 # Infrastructure Components
 
-## TiDB
+## MySQL
 
-Distributed SQL database compatible with MySQL protocol.
-
-**Resources:**
-- Development: 1 PD, 1 TiKV, 1 TiDB
-- Staging: 3 PD, 3 TiKV, 2 TiDB
-- Production: 5 PD, 5 TiKV, 3 TiDB
+Official MySQL 8.4 database deployed as a StatefulSet.
 
 **Access:**
 ```bash
-kubectl port-forward svc/tidb 4000:4000 -n pm-tp-dev
-mysql -h 127.0.0.1 -P 4000 -u root
+kubectl port-forward svc/pm-tp-infra-mysql 3306:3306 -n pm-tp-staging
+mysql -h 127.0.0.1 -P 3306 -u root -pchangeme123
+# Or connect as pmtp user
+mysql -h 127.0.0.1 -P 3306 -u pmtp -pchangeme123 pmtp
 ```
 
 ## Valkey (Redis)

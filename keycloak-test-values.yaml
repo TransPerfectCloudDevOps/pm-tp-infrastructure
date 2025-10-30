@@ -3,8 +3,8 @@ replicas: 1
 # Database configuration
 database:
   vendor: mysql
-  hostname: pm-tp-infra-tidb-tidb.pm-tp-staging.svc
-  port: 4000
+  hostname: pm-tp-infra-mysql.pm-tp-staging.svc.cluster.local
+  port: 3306
   database: keycloak
   username: keycloak
   password: "keycloak_secure_password_123"
@@ -24,7 +24,7 @@ extraEnv: |
   - name: KC_DB
     value: "mysql"
   - name: KC_DB_URL
-    value: "jdbc:mysql://pm-tp-infra-tidb-tidb.pm-tp-staging.svc:4000/keycloak"
+    value: "jdbc:mysql://pm-tp-infra-mysql.pm-tp-staging.svc.cluster.local:3306/keycloak"
   - name: KC_DB_USERNAME
     value: "keycloak"
   - name: KC_DB_PASSWORD

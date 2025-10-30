@@ -1,33 +1,6 @@
 # Development Environment - Minimal Resources
 # Single replicas, reduced storage
 
-# TiDB - Distributed SQL Database
-tidb:
-  enabled: true
-  
-  # Use official PingCAP TiDB Operator chart
-  # helm repo add pingcap https://charts.pingcap.org/
-  chart:
-    repo: https://charts.pingcap.org/
-    name: tidb-operator
-    version: "1.5.0"  # Check latest version
-  
-  values:
-    pd:
-      replicaCount: 1
-      persistence:
-        size: 5Gi
-    tikv:
-      replicaCount: 1
-      persistence:
-        size: 10Gi
-    tidb:
-      replicaCount: 1
-    
-    service:
-      type: ClusterIP
-      port: 4000
-
 # Valkey - Redis-compatible Cache
 valkey:
   enabled: true
@@ -176,50 +149,3 @@ grafana:
             type: prometheus
             url: http://prometheus-server
             isDefault: true
-
-# Traefik - Ingress Controller
-traefik:
-  enabled: true
-  values:
-    deployment:
-      replicas: 1
-    ports:
-      web:
-        port: 8000
-        expose:
-          default: true
-        exposedPort: 80
-        protocol: TCP
-        redirectTo:
-          port: websecure
-      websecure:
-        port: 8443
-        expose:
-          default: true
-        exposedPort: 443
-        protocol: TCP
-        tls:
-          enabled: true
-    ingressRoute:
-      dashboard:
-        enabled: false
-    providers:
-      kubernetesCRD:
-        enabled: true
-        allowCrossNamespace: true
-      kubernetesIngress:
-        enabled: true
-    rbac:
-      enabled: true
-    service:
-      enabled: true
-      type: LoadBalancer
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 200m
-        memory: 256Mi

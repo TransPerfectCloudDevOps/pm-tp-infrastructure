@@ -8,7 +8,6 @@ This repository is configured to work with Rancher Fleet for GitOps deployment o
 ### 1. Chart Dependencies
 All Helm chart dependencies are defined in `charts/pm-tp-infrastructure/Chart.yaml` with proper repository URLs:
 
-- **TiDB Operator**: `https://charts.pingcap.org/`
 - **Valkey**: `https://valkey.io/valkey-helm/`
 - **MinIO**: `https://charts.min.io/`
 - **NATS**: `https://nats-io.github.io/k8s/helm/charts/`
@@ -16,6 +15,8 @@ All Helm chart dependencies are defined in `charts/pm-tp-infrastructure/Chart.ya
 - **Keycloak**: `https://codecentric.github.io/helm-charts`
 - **Prometheus**: `https://prometheus-community.github.io/helm-charts`
 - **Grafana**: `https://grafana.github.io/helm-charts`
+- **Harbor**: `https://helm.goharbor.io`
+- **cert-manager**: `https://charts.jetstack.io`
 
 ### 2. Chart.lock File
 The `Chart.lock` file is committed to the repository so Fleet knows which exact versions of dependencies to download.
