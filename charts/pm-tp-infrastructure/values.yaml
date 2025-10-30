@@ -1,6 +1,24 @@
 # Default values for pm-tp-infrastructure
 # These can be overridden by deployment-specific values files
 
+# MySQL - Custom StatefulSet (disabled by default)
+mysql:
+  enabled: false
+  image: mysql
+  tag: "8.4"
+  rootPassword: "changeme123"
+  database: "pmtp"
+  user: "pmtp"
+  password: "changeme123"
+  storage: "20Gi"
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
 # MinIO - Object Storage
 minio:
   enabled: true
@@ -30,3 +48,33 @@ prometheus:
 
 grafana:
   enabled: false
+
+# cert-manager - TLS Certificate Management
+certManager:
+  enabled: false
+  installCRDs: true
+  email: admin@example.com
+  ingressClass: nginx
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  webhook:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+  cainjector:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi

@@ -20,11 +20,8 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 7.0.22
-- name: harbor
-  repository: https://helm.goharbor.io
-  version: 1.15.2
 - name: cert-manager
   repository: https://charts.jetstack.io
   version: v1.16.5
-digest: sha256:f993a7d59c31be61c3dbb3c7628fc58b9bdc38f9355ef9827c2024ca461f5ed0
-generated: "2025-10-28T14:04:22.906649-05:00"
+digest: sha256:9e8b8e8f1c2a3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8
+generated: "2025-10-30T12:53:00.000000-05:00"

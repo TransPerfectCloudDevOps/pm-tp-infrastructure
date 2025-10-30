@@ -43,11 +43,6 @@ dependencies:
     repository: https://grafana.github.io/helm-charts
     version: "~7.0.0"
     condition: grafana.enabled
-    
-  - name: harbor
-    repository: https://helm.goharbor.io
-    version: "~1.15.0"
-    condition: harbor.enabled
 
   - name: cert-manager
     repository: https://charts.jetstack.io

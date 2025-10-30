@@ -15,7 +15,6 @@ All Helm chart dependencies are defined in `charts/pm-tp-infrastructure/Chart.ya
 - **Keycloak**: `https://codecentric.github.io/helm-charts`
 - **Prometheus**: `https://prometheus-community.github.io/helm-charts`
 - **Grafana**: `https://grafana.github.io/helm-charts`
-- **Harbor**: `https://helm.goharbor.io`
 - **cert-manager**: `https://charts.jetstack.io`
 
 ### 2. Chart.lock File
