@@ -32,18 +32,18 @@ echo "⚙️  Deploying Keycloak StatefulSet and Service..."
 kubectl apply -f keycloak-manual/keycloak.yaml -n keycloak
 
 # Deploy cert-manager resources
-echo "📜 Deploying Let's Encrypt ClusterIssuer and Certificate..."
+echo "📜 Deploying Let's Encrypt Staging ClusterIssuer and Certificate..."
 cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-prod
+  name: letsencrypt-staging
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: erik.hanson@transperfect.com  # Update with your email
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: letsencrypt-staging
     solvers:
     - http01:
         ingress:
@@ -59,7 +59,7 @@ metadata:
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
-    name: letsencrypt-prod
+    name: letsencrypt-staging
     kind: ClusterIssuer
   dnsNames:
   - keycloak.rancher-poc.1.todevopssandbox.com
@@ -112,11 +112,14 @@ echo ""
 echo "🔑 Access Keycloak:"
 echo "   External: https://keycloak.rancher-poc.1.todevopssandbox.com"
 echo ""
+echo "⚠️  Using Let's Encrypt STAGING certificates (browser will show warning)"
+echo "   Click through the security warning in your browser to proceed"
+echo ""
 echo "👤 Default admin credentials:"
 echo "   Username: admin"
 echo "   Password: admin"
 echo ""
 echo "📝 Next steps:"
-echo "1. Wait for certificate to be issued"
-echo "2. Access Keycloak and change default password"
-echo "3. Configure realms and clients for your application"
+echo "1. Access Keycloak and change default password"
+echo "2. Configure realms and clients for your application"
+echo "3. Switch to production certificates when rate limit resets"
