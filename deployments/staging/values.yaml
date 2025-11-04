@@ -105,7 +105,7 @@ opensearch:
 
 # Prometheus
 prometheus:
-  enabled: true
+  enabled: false
   chart:
     repo: https://prometheus-community.github.io/helm-charts
     name: prometheus
@@ -116,11 +116,11 @@ prometheus:
       persistentVolume:
         size: 30Gi
     alertmanager:
-      enabled: true
+      enabled: false
 
 # Grafana
 grafana:
-  enabled: true
+  enabled: false
   chart:
     repo: https://grafana.github.io/helm-charts
     name: grafana
@@ -129,7 +129,7 @@ grafana:
     adminUser: admin
     adminPassword: "changeme123"
     persistence:
-      enabled: true
+      enabled: false
       size: 10Gi
     datasources:
       datasources.yaml:
