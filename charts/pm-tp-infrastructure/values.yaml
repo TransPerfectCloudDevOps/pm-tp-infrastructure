@@ -21,7 +21,7 @@ mysql:
 
 # MinIO - Object Storage
 minio:
-  enabled: true
+  enabled: false
   replicas: 4
   drivesPerNode: 1
   mode: distributed
